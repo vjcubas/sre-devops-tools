@@ -1,4 +1,4 @@
-name: Sandbox
+name: GitHub Context
 
 on:
   push:
