@@ -1,0 +1,19 @@
+name: dockerize-tools
+
+on:
+  push:
+    paths:
+      - "dockerized-tools/**"
+      - ".github/workflows/dockerized-tools.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+    
+      - name: Validate path
+        run: |-
+          cd dockerized-tools
+          pwd
+
