@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
 
       - name: Log into registry
-        run: echo epz0abg9wxf-EUF7hva | docker login https://hub.docker.com/ -u vjcubas --password-stdin
+        run: echo ${{secrets.DOCKER_REGISTRY_PASSWORD}} | docker login -u vjcubas --password-stdin
 
       - name: Build and push the images
         run: |
