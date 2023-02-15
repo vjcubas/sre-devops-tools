@@ -1,16 +1,41 @@
-name: Dockerized tools
+name: dockerize tools
+
 on:
   push:
     branches:
-      - main
+      - master
+    paths:
+      - 'src/**/VERSION'
 jobs:
-  build:
+  push:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Build and push changes
-      uses: harrygogonis/docker-monorepo-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Log into registry
+        run: echo epz0abg9wxf-EUF7hva | docker login https://hub.docker.com/ -u vjcubas --password-stdin
+
+      - name: Build and push the images
+        run: |
+          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "VERSION");
+          do
+            folder=${versionFilePath%"/VERSION"}
+            IMAGE_NAME=${folder##*/}
+
+            tmpName="image-$RANDOM"
+            docker build $folder --file $folder/Dockerfile --tag $tmpName
+            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.REPOSITORY }}/$IMAGE_NAME
+            VERSION=$(cat $versionFilePath)
+
+            echo IMAGE_ID=$IMAGE_ID
+            echo VERSION=$VERSION
+
+            docker tag $tmpName $IMAGE_ID:$VERSION
+            docker push $IMAGE_ID:$VERSION
+          done;
+
 
 
