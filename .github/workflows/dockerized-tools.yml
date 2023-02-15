@@ -3,9 +3,10 @@ name: dockerize tools
 on:
   push:
     branches:
-      - master
+      - main
     paths:
-      - 'src/**/VERSION'
+      - '.github/workflows/dockerized-tools.yml'
+      - 'dockerized-tools/**'
 jobs:
   push:
     runs-on: ubuntu-latest
