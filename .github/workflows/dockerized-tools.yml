@@ -1,20 +1,16 @@
-name: dockerize-tools
-
+name: Dockerized tools
 on:
   push:
-    paths:
-      - "dockerized-tools/**"
-      - ".github/workflows/dockerized-tools.yml"
-
+    branches:
+      - master
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-    
-      - name: Validate path
-        run: |-
-          cd dockerized-tools
-          pwd
+    - uses: actions/checkout@v1
+    - name: Build and push changes
+      uses: harrygogonis/docker-monorepo-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
