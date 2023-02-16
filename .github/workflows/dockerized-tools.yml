@@ -21,21 +21,23 @@ jobs:
 
       - name: Build and push the images
         run: |
-          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "VERSION");
+          for versionFilePath in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.event.before }} | grep "Dockerfile");
           do
-            folder=${versionFilePath%"/VERSION"}
+            folder=${versionFilePath%"/Dockerfile"}
             IMAGE_NAME=${folder##*/}
 
-            tmpName="image-$RANDOM"
-            docker build $folder --file $folder/Dockerfile --tag $tmpName
-            IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.REPOSITORY }}/$IMAGE_NAME
-            VERSION=$(cat $versionFilePath)
+            # tmpName="image-$RANDOM"
+            # docker build $folder --file $folder/Dockerfile --tag $tmpName
+            # IMAGE_ID=${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.REPOSITORY }}/$IMAGE_NAME
+            # VERSION=$(cat $versionFilePath)
 
-            echo IMAGE_ID=$IMAGE_ID
-            echo VERSION=$VERSION
+            # echo IMAGE_ID=$IMAGE_ID
+            # echo VERSION=$VERSION
 
-            docker tag $tmpName $IMAGE_ID:$VERSION
-            docker push $IMAGE_ID:$VERSION
+            # docker tag $tmpName $IMAGE_ID:$VERSION
+            # docker push $IMAGE_ID:$VERSION
+            echo $folder
+            echo $IMAGE_NAME
           done;
 
 
